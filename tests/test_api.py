@@ -1,21 +1,22 @@
-import pytest
-from httpx import AsyncClient
+from fastapi.testclient import TestClient
 from app.main import app
 
+client = TestClient(app)
 
-@pytest.mark.asyncio
-async def test_root_and_docs():
-    async with AsyncClient(app=app, base_url='http://test') as ac:
-        r = await ac.get('/')
-        assert r.status_code == 200
-        r2 = await ac.get('/docs')
-        assert r2.status_code in (200, 307)
+def test_root_and_docs():
+    response = client.get("/")
+    assert response.status_code == 200
 
+    docs = client.get("/docs")
+    assert docs.status_code == 200
 
-@pytest.mark.asyncio
-async def test_recommendations_exist():
-    async with AsyncClient(app=app, base_url='http://test') as ac:
-        r = await ac.get('/recommendations/1?n=5')
-        assert r.status_code == 200
-        body = r.json()
-        assert 'recommendations' in body
+def test_recommendations_exist():
+    client.post("/users", json={"id": 1, "name": "Marco"})
+
+    client.post("/items", json={"id": 1, "title": "Toy Story"})
+
+    client.put("/ratings", json={"user_id": 1, "item_id": 1, "rating": 5})
+
+    response = client.get("/recommendations/1?n=5")
+    assert response.status_code == 200
+    assert "recommendations" in response.json()
