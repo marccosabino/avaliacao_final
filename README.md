@@ -27,8 +27,17 @@ O sistema utiliza um modelo baseado em **filtragem colaborativa**, capaz de:
 
 Tecnologias utilizadas:
 
-- `numpy`
-- `pandas`
+- `Python`
+- `FastAPI`
+- `Pandas`
+- `CSV`
+- `Scikit-learn`
+- `NumPy`
+- `Uvicorn`
+- `zipfile`
+- `Pydantic`
+- `MovieLens`
+- `Docker`
 - Lógica personalizada no arquivo `recommender.py`
 
 ---
